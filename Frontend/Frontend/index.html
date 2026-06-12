@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CalmQuest Counselling Clinic</title>
+<link rel="icon" href="/logo.png" />
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #e8f7ff, #f4fff7);
+    color: #333;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+    color: #0077b6;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 70px 20px;
+  }
+
+  .hero h2 {
+    font-size: 38px;
+    color: #023e8a;
+  }
+
+  .hero p {
+    max-width: 600px;
+    margin: 15px auto;
+    color: #555;
+  }
+
+  .btn {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 25px;
+    background: #00b4d8;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: #0096c7;
+  }
+
+  .services {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 260px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
+  .card h3 {
+    color: #0077b6;
+  }
+
+  .booking {
+    max-width: 450px;
+    margin: auto;
+    padding: 40px;
+  }
+
+  input, textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: gray;
+  }
+
+  #msg {
+    text-align: center;
+    color: green;
+    margin-top: 10px;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <!-- LOGO GOES HERE -->
+    <img src="logo.png" alt="logo"/>
+    <h1>CalmQuest</h1>
+  </div>
+
+  <button class="btn">Book Session</button>
+</header>
+
+<section class="hero">
+  <h2>A calm space for your healing 🌿</h2>
+  <p>
+    CalmQuest Counselling Clinic helps you manage stress, anxiety, relationships, and personal growth in a safe environment.
+  </p>
+  <button class="btn">Get Started</button>
+</section>
+
+<section class="services">
+  <div class="card">
+    <h3>Anxiety Support</h3>
+    <p>Learn to manage stress and overthinking.</p>
+  </div>
+
+  <div class="card">
+    <h3>Relationship Help</h3>
+    <p>Improve communication and emotional connection.</p>
+  </div>
+
+  <div class="card">
+    <h3>Personal Growth</h3>
+    <p>Build confidence and mental clarity.</p>
+  </div>
+</section>
+
+<section class="booking">
+  <h2>Book a Session</h2>
+
+  <form id="form">
+    <input type="text" id="name" placeholder="Your Name" required />
+    <input type="email" id="email" placeholder="Your Email" required />
+    <textarea id="message" rows="4" placeholder="What do you need help with?" required></textarea>
+
+    <button class="btn" type="submit">Submit</button>
+  </form>
+
+  <p id="msg"></p>
+</section>
+
+<footer>
+  © 2026 CalmQuest Counselling Clinic
+</footer>
+
+<script>
+document.getElementById("form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    message: document.getElementById("message").value
+  };
+
+  try {
+    await fetch("https://calmquest-backend-1.onrender.com/api/appointments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById("msg").innerText =
+      "Appointment sent successfully 💙";
+
+    this.reset();
+
+  } catch (err) {
+    document.getElementById("msg").innerText =
+      "Error sending request";
+  }
+});
+</script>
+
+</body>
+</html>
