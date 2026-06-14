@@ -68,6 +68,28 @@ async function sendConfirmationEmail(toEmail, toName, type) {
   });
 }
 
+async function sendOwnerNotification(appointment) {
+  const { name, email, date, time, message } = appointment;
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; color: #333;">
+      <h2 style="color: #2e7d6e;">New Appointment Booking 📅</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Date:</strong> ${date || 'Not specified'}</p>
+      <p><strong>Time:</strong> ${time || 'Not specified'}</p>
+      <p><strong>Message:</strong> ${message || 'No additional message'}</p>
+    </div>
+  `;
+
+  await resend.emails.send({
+    from: 'CalmQuest Bookings <onboarding@resend.dev>',
+    to: 'calmquestcounselingclinic@gmail.com',
+    subject: `New Appointment from ${name}`,
+    html,
+  });
+}
+
 // ─── ROUTES ────────────────────────────────────────────────────────────────
 
 // Appointment booking
@@ -79,8 +101,11 @@ app.post('/api/appointments', async (req, res) => {
     const appointment = new Appointment({ name, email, date, time, message });
     await appointment.save();
 
-    // Send confirmation email
+    // Send confirmation to client
     await sendConfirmationEmail(email, name, 'appointment');
+
+    // Notify the clinic owner
+    await sendOwnerNotification(appointment);
 
     res.status(201).json({ message: 'Appointment booked successfully' });
   } catch (error) {
