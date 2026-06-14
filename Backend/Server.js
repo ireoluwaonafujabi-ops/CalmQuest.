@@ -3,7 +3,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 const app = express();
 app.use(cors());
@@ -27,18 +27,9 @@ const appointmentSchema = new mongoose.Schema({
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 
-// ─── EMAIL TRANSPORTER ─────────────────────────────────────────────────────
+// ─── EMAIL SETUP (RESEND) ──────────────────────────────────────────────────
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family:4
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendConfirmationEmail(toEmail, toName, type) {
   const isAppointment = type === 'appointment';
@@ -69,8 +60,8 @@ async function sendConfirmationEmail(toEmail, toName, type) {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"CalmQuest Counselling Clinic" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'CalmQuest Counselling Clinic <onboarding@resend.dev>',
     to: toEmail,
     subject,
     html,
