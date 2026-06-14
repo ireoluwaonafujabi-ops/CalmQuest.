@@ -61,7 +61,7 @@ async function sendConfirmationEmail(toEmail, toName, type) {
   `;
 
   await resend.emails.send({
-    from: 'CalmQuest Counselling Clinic <onboarding@resend.dev>',
+    from: 'CalmQuest Counselling Clinic <bookings@calmquestcounsellingclinic.com>',
     to: toEmail,
     subject,
     html,
@@ -83,7 +83,7 @@ async function sendOwnerNotification(appointment) {
   `;
 
   await resend.emails.send({
-    from: 'CalmQuest Bookings <onboarding@resend.dev>',
+    from: 'CalmQuest Bookings <bookings@calmquestcounsellingclinic.com>',
     to: 'calmquestcounselingclinic@gmail.com',
     subject: `New Appointment from ${name}`,
     html,
